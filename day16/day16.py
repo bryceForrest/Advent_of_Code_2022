@@ -189,11 +189,11 @@ def part_2(volcano):
         volcano[s].dist = (dijkstra(volcano, s))
 
 
-    # it's POSSIBLE to assume that splitting up the nodes 50/50 will yield
-    # the max flow, but I don't know if it's rigorous. It works here though,
-    # and it's much faster (checking ALL combinations takes about 10 minutes)
+    # assume that splitting up the nodes 50/50 will yield the max flow
     subsets = itertools.combinations(neighbors, len(neighbors) // 2)
 
+    # half of these will be duplicates but trying to filter them didn't
+    # improve performance as far as I could tell
     for s in subsets:
         m = set(s)                  # my nodes to visit
         e = set(neighbors) - m      # elephant's nodes
@@ -202,7 +202,7 @@ def part_2(volcano):
                         dfs(copy.copy(volcano), 'AA', 26, list(e)) + \
                         dfs(copy.copy(volcano), 'AA', 26, list(m)) \
                         )
-
+        
     return max_flow
 ###############################################################################
 # Implementation
