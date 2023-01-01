@@ -13,7 +13,6 @@ class Volcano:
     """
     def __init__(self):
         self.network = dict()
-        self.total_flow = 0
 
     def __copy__(self):
         copy_class = Volcano()
