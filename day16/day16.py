@@ -192,8 +192,6 @@ def part_2(volcano):
     # assume that splitting up the nodes 50/50 will yield the max flow
     subsets = itertools.combinations(neighbors, len(neighbors) // 2)
 
-    # half of these will be duplicates but trying to filter them didn't
-    # improve performance as far as I could tell
     for s in subsets:
         m = set(s)                  # my nodes to visit
         e = set(neighbors) - m      # elephant's nodes
