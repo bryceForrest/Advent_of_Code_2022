@@ -17,7 +17,6 @@ class Volcano:
     def __copy__(self):
         copy_class = Volcano()
         copy_class.network = self.network.copy()
-        copy_class.total_flow = self.total_flow
         return copy_class
 
     def __getitem__(self, key):
@@ -187,7 +186,6 @@ def part_2(volcano):
     for s in volcano:
         volcano[s].dist = (dijkstra(volcano, s))
 
-
     # assume that splitting up the nodes 50/50 will yield the max flow
     subsets = itertools.combinations(neighbors, len(neighbors) // 2)
 
@@ -196,8 +194,8 @@ def part_2(volcano):
         e = set(neighbors) - m      # elephant's nodes
 
         max_flow = max(max_flow, \
-                        dfs(copy.copy(volcano), 'AA', 26, list(e)) + \
-                        dfs(copy.copy(volcano), 'AA', 26, list(m)) \
+                        dfs(volcano, 'AA', 26, list(e)) + \
+                        dfs(volcano, 'AA', 26, list(m)) \
                         )
         
     return max_flow
