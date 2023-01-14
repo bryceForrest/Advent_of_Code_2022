@@ -2,6 +2,7 @@ import re
 import time
 import copy
 import itertools
+import heapq
 
 ###############################################################################
 # Classes
@@ -51,6 +52,17 @@ class Tunnel:
 
     def __bool__(self):
         return self.valve
+
+class Node:
+    """
+    Organize data for a given valve, allows for priority queue
+    """
+    def __init__(self, vertex, dist):
+        self.vertex = vertex
+        self.dist = dist
+
+    def __lt__(self, obj):
+        return self.dist < obj.dist
 
 ###############################################################################
 # Functions
@@ -107,18 +119,21 @@ def dijkstra(graph, source):
     dist = {x : float('inf') for x in graph}
     visited = {x : False for x in graph}
 
-    queue = [(source, 0)]
-
+    queue = [Node(source, 0)]
+    heapq.heapify(queue)
+    
     while queue:
-        u = min(queue, key=lambda x : x[1])
-        queue.remove(u)
-        visited[u[0]] = True
-        dist[u[0]] = u[1]
+        u = heapq.heappop(queue)
+        curr_vertex = u.vertex
+        curr_dist = u.dist
 
-        for v in graph[u[0]].paths:
+        visited[curr_vertex] = True
+        dist[curr_vertex] = curr_dist
+
+        for v in graph[curr_vertex].paths:
             if visited[v] == False:
-                dist[v] = min(dist[v], dist[u[0]] + 1)
-                queue.append((v, dist[v]))
+                dist[v] = min(dist[v], dist[curr_vertex] + 1)
+                heapq.heappush(queue, Node(v, dist[v]))
 
     return dist
 
@@ -134,18 +149,18 @@ def dfs(graph, vertex, minutes, visited):
 
         return      flow from path
     """
-    visited.append(vertex)
+    visited[vertex] = True
     pressure = 0
 
     paths = [x for x in graph[vertex].dist \
-             if x not in visited \
+             if not(visited.setdefault(x, False)) \
              and graph[x].flow \
              and (minutes - graph[vertex].dist[x] - 1) > 0]
 
     if paths:
         pressure = max([dfs(graph, p, \
                             minutes - graph[vertex].dist[p] - 1, \
-                            visited.copy()) \
+                            copy.deepcopy(visited)) \
                             for p in paths
                         ])
     
@@ -164,7 +179,7 @@ def part_1(volcano):
     for s in volcano:
         volcano[s].dist = (dijkstra(volcano, s))
 
-    max_pressure = dfs(volcano, 'AA', 30, [])
+    max_pressure = dfs(volcano, 'AA', 30, dict())
 
     return max_pressure
 
@@ -194,8 +209,8 @@ def part_2(volcano):
         e = set(neighbors) - m      # elephant's nodes
 
         max_flow = max(max_flow, \
-                        dfs(volcano, 'AA', 26, list(e)) + \
-                        dfs(volcano, 'AA', 26, list(m)) \
+                        dfs(volcano, 'AA', 26, {x : True for x in e}) + \
+                        dfs(volcano, 'AA', 26, {x : True for x in m}) \
                         )
         
     return max_flow
