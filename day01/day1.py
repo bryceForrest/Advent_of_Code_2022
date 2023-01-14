@@ -1,27 +1,31 @@
-maxCal = 0
-elfCount = 0
-bestElves = set()
-current = 0
+from time import time
 
-inFile = open("input.txt", "r")
-line = inFile.readline()
 
-while line:
-    if line == '\n':
-        bestElves.add(current)
+def parse():
+    bestElves = set()
+    current = 0
+    inFile = open("input.txt", "r")
+    while line := inFile.readline():
+        if line == "\n":
+            bestElves.add(current)
+            current = 0
+        else:
+            current += int(line)
 
-        current = 0
-        elfCount += 1
-    else:
-        current += int(line)
+    return (bestElves, current)
 
-    line = inFile.readline()
 
-bestElves.add(current)
+bestElves, current = parse()
 
-sortedElves = sorted(bestElves)
-sum = 0
-for i in range(0,3):
-    sum += sortedElves.pop()
+start = time()
 
-print(sum)
+print("Results for part 1:", max(bestElves))
+print("Time taken: {:.2f} seconds".format(time() - start))
+
+start = time()
+
+sortedElves = sorted(bestElves, reverse=True)
+sum = sum(sortedElves[:3])
+
+print("Results for part 2:", sum)
+print("Time taken: {:.2f} seconds".format(time() - start))
