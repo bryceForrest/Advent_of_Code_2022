@@ -1,3 +1,4 @@
+<main>
 <style>article *[title]{border-bottom:1px dotted #ffff66;}</style><article class="day-desc"><h2>--- Day 24: Blizzard Basin ---</h2><p>With everything replanted for next year (and with elephants and monkeys to tend the grove), you and the Elves leave for the extraction point.</p>
 <p>Partway up the mountain that shields the grove is a flat, open area that serves as the extraction point. It's a bit of a climb, but nothing the expedition can't handle.</p>
 <p>At least, that would normally be true; now that the mountain is covered in snow, things have become more difficult than the Elves are used to.</p>
