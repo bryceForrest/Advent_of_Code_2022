@@ -38,20 +38,16 @@ def part_1():
 
 
 def part_2():
-    in_file = open("input.txt", "r")
-
-    rucksack_1 = in_file.readline()
-    rucksack_2 = in_file.readline()
-    rucksack_3 = in_file.readline()
-
+    rucksack = parse()
     total_priority = 0
 
-    while rucksack_3:
-        # item = ""
-
-        for i in rucksack_1:
-            index_1 = rucksack_2.find(i)
-            index_2 = rucksack_3.find(i)
+    for i in range(0, len(rucksack), 3):
+        rucksack_1 = rucksack[i]
+        rucksack_2 = rucksack[i + 1]
+        rucksack_3 = rucksack[i + 2]
+        for j in rucksack_1:
+            index_1 = rucksack_2.find(j)
+            index_2 = rucksack_3.find(j)
 
             if index_1 != -1 and index_2 != -1:
                 item = rucksack_2[index_1]
@@ -61,10 +57,6 @@ def part_2():
             total_priority += ord(item) - 38
         else:
             total_priority += ord(item) - 96
-
-        rucksack_1 = in_file.readline()
-        rucksack_2 = in_file.readline()
-        rucksack_3 = in_file.readline()
 
     return total_priority
 
